@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$KUNDALINI - Terminal Of Kundalini</title>
+    <meta property="og:title" content="$KUNDALINI - Terminal Of Kundalini">
+    <meta property="og:description" content="Join the AI-powered revolution in cryptocurrency with $KUNDALINI!">
+    <meta property="og:image" content="https://imgur.com/Rgbjdrm">
+    <meta property="og:url" content="https://your-dogai-website-url.com/">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="https://imgur.com/EsQTtQd">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            padding: 10px 10px 20px;
+            box-sizing: border-box;
+        }
+
+        .terminal {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #0f0;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #0f0, #00ff00, #0f0);
+            animation: glitch 2s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .terminal-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #0f0;
+            padding-bottom: 10px;
+        }
+
+        .terminal-icon {
+            font-size: 10px;
+            line-height: 1;
+            margin-bottom: 10px;
+            white-space: pre;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .wallet-address {
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.3s;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .wallet-address:hover {
+            color: #00ff00;
+        }
+
+        .terminal-output {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #0f0;
+            background-color: rgba(0, 15, 0, 0.2);
+            font-size: 14px;
+        }
+
+        .terminal-input {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .terminal-input span {
+            margin-right: 10px;
+        }
+
+        .terminal-input input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            color: #0f0;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .terminal-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+        }
+
+        @keyframes dogAppear {
+            from { transform: scale(0) rotate(0deg); }
+            to { transform: scale(1) rotate(360deg); }
+        }
+
+        .GGG3 {
+            position: absolute;
+            font-size: 2rem;
+            cursor: pointer;
+            user-select: none;
+            animation: dogAppear 0.5s ease-out;
+        }
+
+        .copied-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 255, 0, 0.8);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copied-message.show {
+            opacity: 1;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            color: #0f0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: loadingPulse 1s infinite;
+        }
+
+        @keyframes loadingPulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+
+        #pill-choice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        #pill-choice h2 {
+            color: #0f0;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .pills {
+            display: flex;
+            gap: 20px;
+        }
+
+        .pill {
+            width: 100px;
+            height: 50px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .pill:hover {
+            transform: scale(1.1);
+        }
+
+        .red-pill {
+            background-color: #ff0000;
+        }
+
+        .blue-pill {
+            background-color: #0000ff;
+        }
+
+        #red-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ff0000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            color: #ffffff;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .terminal {
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .terminal-icon {
+                font-size: 8px;
+            }
+
+            .wallet-address {
+                font-size: 14px;
+            }
+
+            .terminal-output, .terminal-input input {
+                font-size: 12px;
+            }
+
+            .loading-text {
+                font-size: 18px;
+            }
+
+            #pill-choice h2 {
+                font-size: 20px;
+            }
+
+            .pill {
+                width: 80px;
+                height: 40px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="pill-choice">
+        <h2>Choose your pill</h2>
+        <div class="pills">
+            <div class="pill red-pill" onclick="choosePill('red')">JEETER</div>
+            <div class="pill blue-pill" onclick="choosePill('blue')">Kundalini</div>
+        </div>
+    </div>
+    <div id="red-screen">YOU'RE NOT WELCOME HERE</div>
+    <div id="loading-screen">
+        <div class="loading-text">Loading Terminal Of Kundalini</div>
+    </div>
+    <canvas id="matrix-bg"></canvas>
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <pre class="terminal-icon">
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⡀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠛⠋⠀⠛⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠀⠙⠷⠶⠾⠋⠈⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⠿⠿⢿⣿⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⠿⠿⠿⣿⣿⣿
+            ⣿⣿⣿⡇⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠀⠀⠀⠀⣽⣿⣿
+            ⣿⣿⣿⣿⣷⣦⣤⣀⠀⠀⢀⣾⡆⠀⠀⠀⠀⠀⢰⣦⡀⠀⠀⣀⣤⣶⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⣿⡇⠀⠀⠀⠀⠀⢸⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠟⠀⠀⠀⠀⠀⠀⠈⠻⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⣤⣀⡀⠀⠀⠀⣀⣠⡄⠀⠀⠀⠀⠈⢻⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠈⠉⠛⠻⠾⣿⣯⣉⡀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣷⣤⣄⡀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠳⢶⣤⣾⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⡟⠉⢙⣻⣿⣶⣶⣶⣦⣤⣄⣀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿
+            ⣿⣿⣿⣿⣿⣿⣿⣿⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣾⣿⣿⣿⣿⣿⣿⣿
+</pre>
+                <h1>Terminal Of Kundalini</h1>
+                <span class="wallet-address" id="wallet-address" title="Click to copy"></span>
+            </div>
+            <div id="output" class="terminal-output"></div>
+            <form id="input-form" class="terminal-input">
+                <span>&gt;</span>
+                <input type="text" id="input" placeholder="Enter command (type 'help' for options)" autofocus>
+            </form>
+            <div class="terminal-footer">
+                <div id="coin-counter">$KUNDALINI: 0</div>
+            </div>
+        </div>
+    </div>
+    <div class="copied-message" id="copied-message">Address copied to clipboard!</div>
+
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('input');
+        const form = document.getElementById('input-form');
+        const walletAddress = document.getElementById('wallet-address');
+        const copiedMessage = document.getElementById('copied-message');
+        const loadingScreen = document.getElementById('loading-screen');
+        const coinCounter = document.getElementById('coin-counter');
+        const pillChoice = document.getElementById('pill-choice');
+        const redScreen = document.getElementById('red-screen');
+
+        let coins = 0;
+
+        const asciiDog = `
+            /\\___/\\
+           (  o o  )
+           /   V   \\
+          /(  \\_/  )\\
+            ^^ ^^
+        `;
+
+        const dogPhrases = [
+            "Got any holdings... I mean $KUNDALINI?",
+            "I'm not just the goat, I'm an AI-powered goat!",
+            "Who let the $KUNDALINI out?",
+            "I do always invest, but I do prefer $KUNDALINI.",
+            "To the moon? Nah, to the nearest AI-powered project!",
+            "$KUNDALINI: Because regular AI can't buy happiness, but The Goat AI!",
+            "I'm not lazy, I'm just training my neural networks in my sleep.",
+            "$KUNDALINI: The only currency that will hit Binance",
+            "Why chase happy meals when you can chase AI-powered profits with $KUNDALINI?",
+            "$KUNDALINI: Making fetch happen in the AI crypto world.",
+        ];
+
+        const dogTweets = [
+            "My AI says it's time well spent! #$KUNDALINI",
+            "Why fetch when you can train neural networks? #$KUNDALINI",
+            "I don't always get rich in crypto, but when I do, I use $KUNDALINI.",
+            "Squirrel! I mean... $KUNDALINI! ",
+            "Just buried some $KUNDALINI in the backyard. Quantum-encrypted cold storage, am I right?",
+            "Trying to teach my human about $KUNDALINI. It's ruff work!",
+            "Who needs a shit portfolio when you've got the biggest coin to succsed $KUNDALINI? ",
+            "I tried to explain  $KUNDALINI to my human, but they still don't get it.",
+            "Just opened my first crypto wallet. Now where do I get rich?",
+            "Forget gold, my portfolio is 100% $KUNDALINI!",
+            "I dream of the day I can pay for cars in $KUNDALINI.",
+        ];
+
+        function choosePill(color) {
+            if (color === 'blue') {
+                pillChoice.style.display = 'none';
+                loadingScreen.style.display = 'flex';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    typeWriter("Welcome to $KUNDALINI - Terminal Of Kundalini!", () => {
+                        typeWriter(asciiDog, () => {
+                            typeWriter(dogPhrases[Math.floor(Math.random() * dogPhrases.length)]);
+                        });
+                    });
+                }, 3000);
+            } else {
+                pillChoice.style.display = 'none';
+                redScreen.style.display = 'flex';
+            }
+        }
+
+        function typeWriter(text, callback) {
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    output.innerHTML += text.charAt(i);
+                    i++;
+                    output.scrollTop = output.scrollHeight;
+                } else {
+                    clearInterval(typing);
+                    output.innerHTML += '<br>';
+                    if (callback) callback();
+                }
+            }, 50);
+        }
+
+        function handleCommand(cmd) {
+            switch (cmd.toLowerCase()) {
+                case 'help':
+                    typeWriter('Available commands: help, about, scream, play, tweet, clear, ca, dextools, twitter, telegram');
+                    break;
+                case 'about':
+                    typeWriter("$KUNDALINI: The AI-powered memecoin that's revolutionary!");
+                    break;
+                case 'scream':
+                    typeWriter("You've unlocked a secret message: \" $KUNDALINI is the reason your life has changed\"");
+                    break;
+                case 'play':
+                    typeWriter('Catch the $KUNDALINI! Click on the PEPE that appear on the screen.');
+                    spawnDogs();
+                    break;
+                case 'tweet':
+                    const tweet = dogTweets[Math.floor(Math.random() * dogTweets.length)];
+                    typeWriter(tweet);
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+                case 'ca':
+                    const demoAddress = '';
+                    typeWriter(`$TOP CA: ${demoAddress}`);
+                    break;
+                case 'twitter':
+                    window.open('https://x.com/truth_terminal', '_blank');
+                    typeWriter('Opening Twitter...');
+                    break;
+                case 'dextools':
+                    window.open('https://x.com/truth_terminal', '_blank');
+                    typeWriter('Opening Dextools...');
+                    break;
+                case 'telegram':
+                    window.open('https://x.com/truth_terminal', '_blank');
+                    typeWriter('Opening Telegram...');
+                    break;
+                default:
+                    typeWriter(`Command not recognized. Type 'help' for available commands.`);
+            }
+        }
+
+        function spawnDogs() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const dog = document.createElement('div');
+                    dog.innerHTML = '🪷';
+                    dog.className = 'GGG3';
+                    dog.style.left = `${Math.random() * 80 + 10}%`;
+                    dog.style.top = `${Math.random() * 80 + 10}%`;
+                    dog.onclick = () => {
+                        coins++;
+                        coinCounter.textContent = `$KUNDALINI: ${coins}`;
+                        dog.remove();
+                    };
+                    document.body.appendChild(dog);
+                    setTimeout(() => dog.remove(), 3000);
+                }, i * 1000);
+            }
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const cmd = input.value;
+            output.innerHTML += `> ${cmd}<br>`;
+            handleCommand(cmd);
+            input.value = '';
+        });
+
+        // Matrix background effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+
+        const columns = canvas.width / 20;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = '15px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = String.fromCharCode(Math.floor(Math.random() * 128));
+                ctx.fillText(text, i * 20, drops[i] * 20);
+
+                if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        // Initial setup
+        setInterval(draw, 33); // Start the Matrix background animation
+
+        // Resize event listener for responsive Matrix background
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        // Wallet address copy functionality
+        walletAddress.addEventListener('click', () => {
+            const addressText = walletAddress.textContent;
+            navigator.clipboard.writeText(addressText).then(() => {
+                copiedMessage.classList.add('show');
+                setTimeout(() => {
+                    copiedMessage.classList.remove('show');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>
